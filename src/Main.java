@@ -18,7 +18,7 @@
 /**
  *
  * Client Billing Tool
- * A simple tool written in Java for calculating your hourly billable hours
+ * A simple tool written in Java for calculating your billable hours
  * 
  * @version 0.1.0
  * @author Sherif Ramadan

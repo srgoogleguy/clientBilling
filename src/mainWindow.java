@@ -1,8 +1,3 @@
-import java.awt.Toolkit;
-import java.util.Timer;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-
 /*
 *   This file is part of Client Billing Tool.
 *
@@ -19,6 +14,11 @@ import javax.swing.event.CaretListener;
 *   You should have received a copy of the GNU Lesser General Public License
 *   along with Client Billing Tool.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import java.awt.Toolkit;
+import java.util.Timer;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 
 /*
  * mainWindow.java

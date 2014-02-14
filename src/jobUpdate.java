@@ -1,5 +1,3 @@
-import java.util.TimerTask;
-
 /*
 *   This file is part of Client Billing Tool.
 *
@@ -16,6 +14,8 @@ import java.util.TimerTask;
 *   You should have received a copy of the GNU Lesser General Public License
 *   along with Client Billing Tool.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import java.util.TimerTask;
 
 /**
  *
