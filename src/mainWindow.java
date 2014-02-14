@@ -35,7 +35,7 @@ public class mainWindow extends javax.swing.JFrame {
     public long startTime = 0;
     public long clockTotal = 0;
     public Timer jobTicker;
-    public double rate;
+    public double rate = 60.00;
     
     /** Creates new form mainWindow */
     public mainWindow() {
