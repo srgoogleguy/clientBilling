@@ -40,11 +40,11 @@ public class jobUpdate extends TimerTask {
         String time;
         time = this.formatTime(seconds);
         this.window.updateClock(time);
-        rTotal = this.calculateTotal(seconds, this.window.rate, 0);
-        bTotal = this.calculateTotal(seconds, this.window.rate, min);
+        rTotal = this.window.calculateTotal(seconds, this.window.rate, 0);
+        bTotal = this.window.calculateTotal(seconds, this.window.rate, min);
         this.window.updateRunningTotal(rTotal);
         this.window.updateBillingTotal(bTotal);
-        this.window.updateBillingHours(String.format("%.2f", this.getBillableHours(seconds,min)));
+        this.window.updateBillingHours(String.format("%.2f", this.window.getBillableHours(seconds,min)));
     }
     
     private String formatTime(long seconds) {
@@ -55,27 +55,6 @@ public class jobUpdate extends TimerTask {
         h = Math.round(Math.floor(seconds / 60 / 60));
         t = String.format("%02d:%02d:%02d", h, m, s);
         return t;
-    }
-    
-    private String calculateTotal(long seconds, double rate, long min) {
-        String total = "$0.00";
-        double r;
-        if (rate > 0) {
-            if (min > 0) {
-                double hours = this.getBillableHours(seconds, min);
-                r = hours * rate;
-            } else {
-                r = (rate / 60 / 60) * seconds;
-            }
-            total = String.format("$%.2f", r);
-        }
-        return total;
-    }
-    
-    private double getBillableHours(long seconds, long min) {
-        double coeff = (3600 / ((double)min));
-        double hours = Math.round((((double)seconds)/60/60)*coeff)/coeff;
-        return hours;
     }
 
 }

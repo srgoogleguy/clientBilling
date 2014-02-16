@@ -1,18 +1,18 @@
 /*
-*   This file is part of Client Billing Tool.
-*
-*   Client Billing Tool is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU Lesser General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   Client Billing Tool is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU Lesser General Public License for more details.
-*
-*   You should have received a copy of the GNU Lesser General Public License
-*   along with Client Billing Tool.  If not, see <http://www.gnu.org/licenses/>.
+ *   This file is part of Client Billing Tool.
+ *
+ *   Client Billing Tool is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Client Billing Tool is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with Client Billing Tool.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 import java.awt.Toolkit;
@@ -36,12 +36,13 @@ public class mainWindow extends javax.swing.JFrame {
     public long clockTotal = 0;
     public Timer jobTicker;
     public double rate = 60.00;
-    
+
     /** Creates new form mainWindow */
     public mainWindow() {
         initComponents();
         this.jobTicker = new Timer();
         this.rateTextField.addCaretListener(new CaretListener() {
+
             @Override
             public void caretUpdate(CaretEvent e) {
                 rateValueUpdate();
@@ -77,23 +78,19 @@ public class mainWindow extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("images/clientBilling.png")));
         setResizable(false);
 
-        rateLabel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        rateLabel.setFont(new java.awt.Font("SansSerif", 1, 18));
         rateLabel.setText("Rate");
 
+        rateTextField.setColumns(10);
         rateTextField.setText("60.00");
-        rateTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rateTextFieldActionPerformed(evt);
-            }
-        });
 
-        ratePerLabel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        ratePerLabel.setFont(new java.awt.Font("Dialog", 1, 14));
         ratePerLabel.setText("/ hour");
 
-        rateCurrencyLabel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        rateCurrencyLabel.setFont(new java.awt.Font("Dialog", 1, 14));
         rateCurrencyLabel.setText("$");
 
-        clockValueLabel.setFont(new java.awt.Font("Monospaced", 1, 24)); // NOI18N
+        clockValueLabel.setFont(new java.awt.Font("Monospaced", 1, 24));
         clockValueLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         clockValueLabel.setText("00:00:00");
 
@@ -111,13 +108,13 @@ public class mainWindow extends javax.swing.JFrame {
             }
         });
 
-        billableHoursLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        billableHoursLabel.setFont(new java.awt.Font("Dialog", 1, 12));
         billableHoursLabel.setText("Billable Hours:");
 
-        runningTotalLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        runningTotalLabel.setFont(new java.awt.Font("Dialog", 1, 12));
         runningTotalLabel.setText("Running Total:");
 
-        billableAmountLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        billableAmountLabel.setFont(new java.awt.Font("Dialog", 1, 12));
         billableAmountLabel.setText("Billable Amount:");
 
         billableHoursValueLabel.setText("0.00");
@@ -189,64 +186,95 @@ public class mainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-private void rateTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rateTextFieldActionPerformed
-    
-}//GEN-LAST:event_rateTextFieldActionPerformed
-
-public void rateValueUpdate() {
-    if (this.rateTextField.getText().length() > 0) {
-        try {
-            this.rate = Double.parseDouble(this.rateTextField.getText());
-        } catch(Exception e) {
-            this.rate = 0.0;
+    public void rateValueUpdate() {
+        if (this.rateTextField.getText().length() > 0) {
+            try {
+                this.rate = Double.parseDouble(this.rateTextField.getText());
+            } catch (Exception e) {
+                this.rate = 0.0;
+            }
         }
+        /*
+         * Update billable hours and running total here, but only if the timer
+         * isn't running anymore.
+         * 
+         */
+        if (!this.clockState) {
+            long s;
+            s = Math.round(this.clockTotal / 1000);
+            String rTotal = this.calculateTotal(s, this.rate, 0);
+            String bTotal = this.calculateTotal(s, this.rate, 900L);
+            this.updateRunningTotal(rTotal);
+            this.updateBillingTotal(bTotal);
+        }
+
     }
-}
 
-private void clockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockButtonActionPerformed
-    if (!this.clockState) {
-        this.startTime = System.currentTimeMillis();
-        this.clockButton.setText("Stop");
-        this.clockState = true;
-        this.jobTicker.scheduleAtFixedRate(new jobUpdate(this), 100, 100);
-    } else {
-        this.jobTicker.cancel();
-        this.jobTicker = new Timer();
-        this.clockState = false;
-        this.clockTotal += System.currentTimeMillis() - this.startTime;
-        this.clockButton.setText("Start");
+    private void clockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockButtonActionPerformed
+        if (!this.clockState) {
+            this.startTime = System.currentTimeMillis();
+            this.clockButton.setText("Stop");
+            this.clockState = true;
+            this.jobTicker.scheduleAtFixedRate(new jobUpdate(this), 100, 100);
+        } else {
+            this.jobTicker.cancel();
+            this.jobTicker = new Timer();
+            this.clockState = false;
+            this.clockTotal += System.currentTimeMillis() - this.startTime;
+            this.clockButton.setText("Start");
+        }
+    }//GEN-LAST:event_clockButtonActionPerformed
+
+    private void clockResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockResetButtonActionPerformed
+        if (!this.clockState) {
+            this.startTime = 0;
+            this.clockTotal = 0;
+        } else {
+            this.startTime = System.currentTimeMillis();
+            this.clockTotal = 0;
+        }
+        this.updateClock("00:00:00");
+        this.updateRunningTotal("$0.00");
+        this.updateBillingTotal("$0.00");
+        this.updateBillingHours("0.00");
+    }//GEN-LAST:event_clockResetButtonActionPerformed
+
+    public void updateClock(String value) {
+        this.clockValueLabel.setText(value);
     }
-}//GEN-LAST:event_clockButtonActionPerformed
 
-private void clockResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockResetButtonActionPerformed
-    if (!this.clockState) {
-        this.startTime = 0;
-        this.clockTotal = 0;
-    } else {
-        this.startTime = System.currentTimeMillis();
-        this.clockTotal = 0;
+    public void updateRunningTotal(String value) {
+        this.runningTotalValueLabel.setText(value);
     }
-    this.updateClock("00:00:00");
-    this.updateRunningTotal("$0.00");
-    this.updateBillingTotal("$0.00");
-    this.updateBillingHours("0.00");
-}//GEN-LAST:event_clockResetButtonActionPerformed
 
-public void updateClock(String value) {
-    this.clockValueLabel.setText(value);
-}
+    public void updateBillingTotal(String value) {
+        this.billableAmountValueLabel.setText(value);
+    }
 
-public void updateRunningTotal(String value) {
-    this.runningTotalValueLabel.setText(value);
-}
+    public void updateBillingHours(String value) {
+        this.billableHoursValueLabel.setText(value);
+    }
 
-public void updateBillingTotal(String value) {
-    this.billableAmountValueLabel.setText(value);
-}
-
-public void updateBillingHours(String value) {
-    this.billableHoursValueLabel.setText(value);
-}
+    public String calculateTotal(long seconds, double rate, long min) {
+        String total = "$0.00";
+        double r;
+        if (rate > 0) {
+            if (min > 0) {
+                double hours = this.getBillableHours(seconds, min);
+                r = hours * rate;
+            } else {
+                r = (rate / 60 / 60) * seconds;
+            }
+            total = String.format("$%.2f", r);
+        }
+        return total;
+    }
+    
+    public double getBillableHours(long seconds, long min) {
+        double coeff = (3600 / ((double) min));
+        double hours = Math.round((((double) seconds) / 60 / 60) * coeff) / coeff;
+        return hours;
+    }
 
     /**
      * @param args the command line arguments
