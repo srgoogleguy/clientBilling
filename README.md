@@ -2,7 +2,7 @@
 
 ## Client Billing 0.1.0 
 
-__A simple tool written in Java for calculating your billable hours.__
+_A simple tool written in Java for calculating your billable hours._
 
 __Client Billing__ is a simple tool, written in Java, that allows you to keep
 track of the hours you’ve spent on a job and how much to bill the client, based
@@ -15,6 +15,6 @@ only keep track of a single job at a time.
 
 ![Screen Shot](https://sheriframadan.com/javaClientBilling/screenShot.png)
 
-Client Billing is licensed under [GNU LGPL](http://www.gnu.org/licenses/lgpl.html), so feel free to do with what you'd like under those terms.
+Client Billing is licensed under [GNU LGPL](http://www.gnu.org/licenses/lgpl.html), so feel free to do with it what you'd like under those terms.
 
 To download the executable [JAR](https://sheriframadan.com/javaClientBilling/clientBilling.jar) file or for more information about the project you can visit [my blog page](https://sheriframadan.com/javaclientbilling/) about it with all of the details.
