@@ -1,6 +1,6 @@
 # Java Client Billing Tool 
 
-## Client Billing 0.1.0 
+## Client Billing 0.1.1 
 
 _A simple tool written in Java for calculating your billable hours._
 
